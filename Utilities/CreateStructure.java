@@ -28,7 +28,10 @@ public class CreateStructure {
     }
 
     public static void printHelpAndExit() {
-        //TODO: Implement
+        System.out.println("How to use this file:");
+        System.out.println(" - Use param 'Year' to specify a single year for which to create the day structure");
+        System.out.println(" - Use param 'Years' to specify two years. The day structure is created for both of those years and every year inbetween them");
+        System.out.println(" - Use param 'Reset' to delete all content in the Years-directory. CAUTION: Irreversible Action!!!");
         System.exit(1);
     }
 
