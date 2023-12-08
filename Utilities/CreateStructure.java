@@ -13,14 +13,14 @@ public class CreateStructure {
         if (args.length == 0)
             printHelpAndExit();
         switch (args[0]) {
+            case "Reset":
+                deleteYears();
+                break;
             case "Years":
                 loopThroughYears(args[1], args[2]);
                 break;
             case "Year":
                 createYearStructure(args[1]);
-                break;
-            case "Reset":
-                deleteYears();
                 break;
             default:
                 break;
@@ -30,13 +30,40 @@ public class CreateStructure {
     public static void printHelpAndExit() {
         System.out.println("How to use this file:");
         System.out.println(" - Use param 'Year' to specify a single year for which to create the day structure");
-        System.out.println(" - Use param 'Years' to specify two years. The day structure is created for both of those years and every year inbetween them");
-        System.out.println(" - Use param 'Reset' to delete all content in the Years-directory. CAUTION: Irreversible Action!!!");
+        System.out.println(
+                " - Use param 'Years' to specify two years. The day structure is created for both of those years and every year inbetween them");
+        System.out.println(
+                " - Use param 'Reset' to delete all content in the Years-directory. CAUTION: Irreversible Action!!!");
         System.exit(1);
     }
 
+    public static void deleteYears() {
+        File baseDir = new File("Years");
+        while (baseDir.list().length > 0) {
+            for (File f : baseDir.listFiles())
+                recDel(f);
+        }
+    }
+
+    private static void recDel(File f) {
+        if (f.isFile() || (f.isDirectory() && f.list().length == 0))
+            f.delete();
+        else {
+            for (File _f : f.listFiles())
+                recDel(_f);
+        }
+    }
+
+    public static void loopThroughYears(String beginYear, String endYear) {
+        int begin = Integer.parseInt(beginYear);
+        int end = Integer.parseInt(endYear);
+        for (int i = begin; i <= end; i++) {
+            createYearStructure(Integer.toString(i));
+        }
+    }
+
     public static void createYearStructure(String yearNum) {
-        final String basePath = "Years" + "\\" + "Y" + yearNum;
+        final String basePath = "Years" + File.separator + "Y" + yearNum;
         new File(basePath).mkdir();
         for (int i = 1; i < 26; i++) {
             String childName = convertToDayName(i);
@@ -90,50 +117,28 @@ public class CreateStructure {
                 BufferedReader br = new BufferedReader(new FileReader("Utilities" + File.separator + "Example.txt"))) {
 
             String temp;
-            for (int i=0; i<41; i++) {
+            for (int i = 0; i < 41; i++) {
                 temp = br.readLine();
                 if (i == 0) {
                     String begin = temp.substring(0, 15); //Should contain everything up to the Y in the year num
                     String year = curr.getPath().substring(7, 11); //Should contain the year number
                     String mid = temp.substring(19, 24); //Should contain .Day_
                     String day = curr.getPath().substring(16, 18); //Should contain the day number
-                    bw.write(begin+year+mid+day+";\n");
+                    bw.write(begin + year + mid + day + ";\n");
                 } else if (i == 9) {
                     String begin = temp.substring(0, 68);
                     String year = curr.getPath().substring(7, 11); //Should contain the year number
                     String mid = temp.substring(72, 102);
                     String day = curr.getPath().substring(16, 18); //Should contain the day number
                     String end = temp.substring(104);
-                    bw.write(begin+year+mid+day+end+"\n");
-                } else bw.write(temp+"\n");
+                    bw.write(begin + year + mid + day + end + "\n");
+                } else
+                    bw.write(temp + "\n");
             }
 
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
-        }
-    }
-
-    public static void loopThroughYears(String beginYear, String endYear) {
-        int begin = Integer.parseInt(beginYear);
-        int end = Integer.parseInt(endYear);
-        for (int i=begin; i<=end; i++) {
-            createYearStructure(Integer.toString(i));
-        }
-    }
-
-    public static void deleteYears() {
-        File baseDir = new File("Years");
-        while (baseDir.list().length>0) {
-            for (File f : baseDir.listFiles())
-                recDel(f);
-        }
-    }
-
-    private static void recDel(File f) {
-        if (f.isFile() || (f.isDirectory() && f.list().length == 0)) f.delete();
-        else {
-            for (File _f : f.listFiles()) recDel(_f);
         }
     }
 }
