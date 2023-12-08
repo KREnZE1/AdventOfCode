@@ -23,12 +23,12 @@ public class CreateStructure {
     }
 
     public static void printHelpAndExit() {
-
+        System.exit(1);
     }
 
     public static void createYearStructure(String yearNum) {
-        final String basePath = "Years" + File.separator + "Y" + yearNum + File.separator;
-
+        final String basePath = "Years" + "\\" + "Y" + yearNum;
+        new File(basePath).mkdir();
         for (int i = 1; i < 26; i++) {
             String childName = convertToDayName(i);
             File newDir = new File(basePath, childName);
@@ -59,7 +59,6 @@ public class CreateStructure {
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
-            System.exit(-1);
         }
         return file;
     }
@@ -82,7 +81,7 @@ public class CreateStructure {
                 BufferedReader br = new BufferedReader(new FileReader("Utilities" + File.separator + "Example.txt"))) {
 
             String temp;
-            for (int i=0; i<42; i++) {
+            for (int i=0; i<41; i++) {
                 temp = br.readLine();
                 if (i == 0) {
                     String begin = temp.substring(0, 15); //Should contain everything up to the Y in the year num
@@ -103,7 +102,6 @@ public class CreateStructure {
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
-            System.exit(-1);
         }
     }
 }

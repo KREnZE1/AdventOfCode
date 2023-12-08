@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Test {
+public class Main {
 
     static final String INPUTLOC = "Years"+java.io.File.separator+"Y2021"+java.io.File.separator+"Day_01"+java.io.File.separator+"input.txt";
     static ArrayList<String> input = new ArrayList<>();
