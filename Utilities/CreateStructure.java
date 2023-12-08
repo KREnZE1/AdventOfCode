@@ -10,19 +10,21 @@ import java.io.IOException;
 public class CreateStructure {
 
     public static void main(String[] args) {
-        if (args.length < 2)
+        if (args.length == 0)
             printHelpAndExit();
         switch (args[0]) {
             case "Year":
                 createYearStructure(args[1]);
                 break;
-
+            case "Years":
+                loopThroughYears(args[1], args[2]);
             default:
                 break;
         }
     }
 
     public static void printHelpAndExit() {
+        //TODO: Implement
         System.exit(1);
     }
 
@@ -102,6 +104,14 @@ public class CreateStructure {
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
+        }
+    }
+
+    public static void loopThroughYears(String beginYear, String endYear) {
+        int begin = Integer.parseInt(beginYear);
+        int end = Integer.parseInt(endYear);
+        for (int i=begin; i<=end; i++) {
+            createYearStructure(Integer.toString(i));
         }
     }
 }
