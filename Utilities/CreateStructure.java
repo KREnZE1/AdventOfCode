@@ -13,11 +13,15 @@ public class CreateStructure {
         if (args.length == 0)
             printHelpAndExit();
         switch (args[0]) {
+            case "Years":
+                loopThroughYears(args[1], args[2]);
+                break;
             case "Year":
                 createYearStructure(args[1]);
                 break;
-            case "Years":
-                loopThroughYears(args[1], args[2]);
+            case "Reset":
+                deleteYears();
+                break;
             default:
                 break;
         }
@@ -112,6 +116,21 @@ public class CreateStructure {
         int end = Integer.parseInt(endYear);
         for (int i=begin; i<=end; i++) {
             createYearStructure(Integer.toString(i));
+        }
+    }
+
+    public static void deleteYears() {
+        File baseDir = new File("Years");
+        while (baseDir.list().length>0) {
+            for (File f : baseDir.listFiles())
+                recDel(f);
+        }
+    }
+
+    private static void recDel(File f) {
+        if (f.isFile() || (f.isDirectory() && f.list().length == 0)) f.delete();
+        else {
+            for (File _f : f.listFiles()) recDel(_f);
         }
     }
 }
