@@ -12,4 +12,4 @@ The calender started in 2015 and jhas continued every year since then. This repo
 
 ### What is already implemented
 
-Anything from the commit e22a44c052a7333a6fae37499bf85909186da178 has not yet been implemented, everythng else should have at least a partial solution in this repo
+Any folder where the last commit was the third one has not yet been implemented, everything with a newer commit should have at least been partially implemented
