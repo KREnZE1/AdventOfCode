@@ -69,16 +69,17 @@ public class Main {
     }
 
     public static void solvePartTwo() {
-        //TODO Optimize
+        //TODO Optimize (or use Linux instead of Windows because there it works :shrug:)
         BigInteger min = null;
         BigInteger currVal = null;
 
         for (int i = 0; i < seedNumbers.size(); i += 2) {
             System.out.println("Total: " + i + " out of " + seedNumbers.size());
+            System.out.println("min = " + min);
             for (int j = 0; j < seedNumbers.get(i + 1).intValue(); j++) {
                 currVal = seedNumbers.get(i).add(new BigInteger(Integer.toString(j)));
-                System.out.println("Current: " + currVal + ", "
-                        + currVal.subtract(seedNumbers.get(i)).divide(seedNumbers.get(i + 1)) + "%");
+                // System.out.println("Current: " + currVal + ", "
+                //         + currVal.subtract(seedNumbers.get(i)).divide(seedNumbers.get(i + 1)) + "%");
                 for (Converter c : conversions)
                     currVal = c.convert(currVal);
                 if (min == null || currVal == min.min(currVal))
