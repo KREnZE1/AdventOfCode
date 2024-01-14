@@ -41,8 +41,10 @@ public class Remover {
     }
 
     private static void recDel(File f, Function<File, Boolean> condition) {
-        if ((f.isFile() || (f.isDirectory() && f.list().length == 0)) && condition.apply(f))
-            f.delete();
+        if (f.isFile() || (f.isDirectory() && f.list().length == 0)) {
+            if (condition.apply(f))
+                f.delete();
+        }
         else {
             for (File _f : f.listFiles())
                 recDel(_f, condition);
