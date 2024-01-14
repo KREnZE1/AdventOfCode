@@ -13,17 +13,9 @@ public class CreateStructure {
         if (args.length == 0)
             printHelpAndExit();
         switch (args[0]) {
-            case "Reset":
-                deleteYears();
-                break;
-            case "Years":
-                loopThroughYears(args[1], args[2]);
-                break;
-            case "Year":
-                createYearStructure(args[1]);
-                break;
-            default:
-                break;
+            case "Years" -> loopThroughYears(args[1], args[2]);
+            case "Year" -> createYearStructure(args[1]);
+            default -> printHelpAndExit();
         }
     }
 
@@ -32,26 +24,7 @@ public class CreateStructure {
         System.out.println(" - Use param 'Year' to specify a single year for which to create the day structure");
         System.out.println(
                 " - Use param 'Years' to specify two years. The day structure is created for both of those years and every year inbetween them");
-        System.out.println(
-                " - Use param 'Reset' to delete all content in the Years-directory. CAUTION: Irreversible Action!!!");
         System.exit(1);
-    }
-
-    public static void deleteYears() {
-        File baseDir = new File("Years");
-        while (baseDir.list().length > 0) {
-            for (File f : baseDir.listFiles())
-                recDel(f);
-        }
-    }
-
-    private static void recDel(File f) {
-        if (f.isFile() || (f.isDirectory() && f.list().length == 0))
-            f.delete();
-        else {
-            for (File _f : f.listFiles())
-                recDel(_f);
-        }
     }
 
     public static void loopThroughYears(String beginYear, String endYear) {
@@ -114,7 +87,7 @@ public class CreateStructure {
     private static void createJavaClass(String parentPath) {
         File curr = createFile(parentPath, "Main.java");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(curr));
-                BufferedReader br = new BufferedReader(new FileReader("Utilities" + File.separator + "Example.txt"))) {
+                BufferedReader br = new BufferedReader(new FileReader("Utilities" + File.separator + "Baseclass.txt"))) {
 
             String temp;
             for (int i = 0; i < 41; i++) {
