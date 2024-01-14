@@ -5,6 +5,8 @@ import java.util.function.Function;
 
 public class Remover {
 
+    private static boolean delHappened = false;
+
     public static void main(String[] args) {
         if (args.length == 0) printHelpAndExit();
         switch (args[0]) {
@@ -34,16 +36,19 @@ public class Remover {
 
     private static void delYears(Function<File, Boolean> condition) {
         File baseDir = new File("Years");
-        while (baseDir.list().length > 0) {
+        do {
+            delHappened = false;
             for (File f : baseDir.listFiles())
                 recDel(f, condition);
-        }
+        } while (delHappened);
     }
 
     private static void recDel(File f, Function<File, Boolean> condition) {
         if (f.isFile() || (f.isDirectory() && f.list().length == 0)) {
-            if (condition.apply(f))
+            if (condition.apply(f)) {
                 f.delete();
+                delHappened = true;
+            }
         }
         else {
             for (File _f : f.listFiles())
