@@ -26,15 +26,15 @@ public class Remover {
 
     public static void delAll() {
         Function<File, Boolean> isDeletable = a -> true;
-        delYears(isDeletable);
+        delFiles(isDeletable);
     }
 
     public static void delEmpty() {
         Function<File, Boolean> isDeletable = a -> a.length() == 0;
-        delYears(isDeletable);
+        delFiles(isDeletable);
     }
 
-    private static void delYears(Function<File, Boolean> condition) {
+    private static void delFiles(Function<File, Boolean> condition) {
         File baseDir = new File("Years");
         do {
             delHappened = false;
