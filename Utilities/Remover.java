@@ -8,15 +8,18 @@ public class Remover {
     private static boolean delHappened = false;
 
     public static void main(String[] args) {
-        if (args.length == 0) printHelpAndExit();
+        //TODO: Add new methods
+        if (args.length == 0)
+            printHelpAndExit();
         switch (args[0]) {
             case "All" -> delAll();
-            case "Empty" -> delEmpty();
+            case "Empty" -> delAllEmpty();
             default -> printHelpAndExit();
         }
     }
 
     public static void printHelpAndExit() {
+        //TODO: Add new methods
         System.out.println("How to use this file:");
         System.out.println(" - Use param 'All' to delete every file");
         System.out.println(" - Use param 'Empty' to delete all files without any content");
@@ -25,13 +28,35 @@ public class Remover {
     }
 
     public static void delAll() {
-        Function<File, Boolean> isDeletable = a -> true;
-        delFiles(isDeletable);
+        delFiles((f) -> true);
     }
 
-    public static void delEmpty() {
-        Function<File, Boolean> isDeletable = a -> a.length() == 0;
-        delFiles(isDeletable);
+    public static void delAllEmpty() {
+        delFiles((f) -> f.length() == 0);
+    }
+
+    public static void delInput() {
+        delFiles((f) -> f.getName() == "input.txt");
+    }
+
+    public static void delInputEmpty() {
+        delFiles((f) -> f.getName() == "input.txt" && f.length() == 0);
+    }
+
+    public static void delTestIn() {
+        delFiles((f) -> f.getName() == "testInput.txt");
+    }
+
+    public static void delTestInEmpty() {
+        delFiles((f) -> f.getName() == "testInput.txt" && f.length() == 0);
+    }
+
+    public static void delMain() {
+        delFiles((f) -> f.getName() == "Main.java");
+    }
+
+    public static void delMainEmpty() {
+        delFiles((f) -> f.getName() == "Main.java" && isUnedited(f.length()));
     }
 
     private static void delFiles(Function<File, Boolean> condition) {
@@ -49,10 +74,15 @@ public class Remover {
                 f.delete();
                 delHappened = true;
             }
-        }
-        else {
+        } else {
             for (File _f : f.listFiles())
                 recDel(_f, condition);
         }
+    }
+
+    private static boolean isUnedited(long a) {
+        long b = new File("Utilities"+File.separatorChar+"Basetext.txt").length();
+        int allowedDiff = 2;
+        return (a-b)<allowedDiff && (a-b)>-allowedDiff;
     }
 }
