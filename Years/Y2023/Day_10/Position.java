@@ -14,9 +14,4 @@ public class Position {
         Position checkAgainst = (Position) o;
         return this.x == checkAgainst.x && this.y == checkAgainst.y;
     }
-
-    public void right() {this.x++;}
-    public void left() {this.x--;}
-    public void down() {this.y--;}
-    public void up() {this.y++;}
 }

@@ -4,11 +4,37 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Main {
 
     private enum Direction {
-        UP, RIGHT, DOWN, LEFT
+        UP {
+            @Override
+            Direction invert() {
+                return Direction.DOWN;
+            }
+        },
+        RIGHT {
+            @Override
+            Direction invert() {
+                return Direction.LEFT;
+            }
+        },
+        DOWN {
+            @Override
+            Direction invert() {
+                return Direction.UP;
+            }
+        },
+        LEFT {
+            @Override
+            Direction invert() {
+                return Direction.RIGHT;
+            }
+        };
+
+        abstract Direction invert();
     }
 
     static final String INPUTLOC = "Years" + java.io.File.separator + "Y2023" + java.io.File.separator + "Day_10"
@@ -37,67 +63,89 @@ public class Main {
     }
 
     public static void solvePartOne() {
-        //Step 1: Find start position
+        //Step 1: Find start location
         Position start = new Position(0, 0);
+        boolean done = false;
         for (int i = 0; i < input.size(); i++) {
             for (int j = 0; j < input.get(i).length; j++) {
-                if (input.get(i)[j] == 'S') {
-                    start.x = i;
-                    start.y = j;
+                start = new Position(j, i);
+                if (getChar(start) == 'S') {
+                    done = true;
+                    break;
                 }
             }
+            if (done)
+                break;
         }
 
-        //Step 2: Traverse the maze
+        //Step 2: Replace S with correct character
+        HashSet<Direction> connections = new HashSet<>(2);
+        for (Direction d : Direction.values()) {
+            Position newPos = calcNew(d, start);
+            if (newPos == null)
+                continue;
+            if (points(d.invert(), newPos))
+                connections.add(d);
+        }
+        input.get(start.y)[start.x] = getReplacement(connections);
+
+        //Step 3: Traverse the maze
         int stepCounter = 0;
         Position currPos = start;
-        Position last = currPos;
+        Position lastPos = currPos;
         do {
-            //Can move up?
-                //Is there a space
-                //Is the space connected (pointing towards current space)
-            //Was I just on the upper space
-                //Check: New position = last Position?
-                // -> Yes: Dont
-                // -> No: last = curr, curr = new
-            //Assuming possible and not last -> move there
-                //Increase the step counter
-            //Assuming impossible try right
-            //Assuming that impossible too try down
-            //Assuming that impossible too try left
-            //Assuming that impossible send error message and exit
-
             for (Direction d : Direction.values()) {
-                Position suggestedNew = calcNew(d, currPos);
-                if (movePossible(d, suggestedNew) && !suggestedNew.equals(last)) {
-                    last = currPos;
-                    currPos = suggestedNew;
+                Position newPos = calcNew(d, currPos);
+                if (points(d, currPos) && !lastPos.equals(newPos)) {
                     stepCounter++;
+                    lastPos = currPos;
+                    currPos = newPos;
+                    break;
                 }
             }
-        } while(!currPos.equals(start));
+        } while (!currPos.equals(start));
 
-        //Step 3: Calculate distance
-        System.out.println(stepCounter/2);
+        //Step 4: Calculate solution
+        System.out.println(stepCounter / 2);
     }
 
-    private static boolean movePossible(Direction d, Position p) {
-        //TODO: Check if this does what it is expected to
-        return switch (d) {
-            case UP -> ((p.y>0) && (input.get(p.y)[p.x] == '7' || input.get(p.y)[p.x] == '|' || input.get(p.y)[p.x] == 'F'));
-            case RIGHT -> ((p.x<input.get(p.y).length-1) && (input.get(p.y)[p.x] == '7' || input.get(p.y)[p.x] == '-' || input.get(p.y)[p.x] == 'J'));
-            case DOWN -> ((p.y<input.size()-1) && (input.get(p.y)[p.x] == 'L' || input.get(p.y)[p.x] == '|' || input.get(p.y)[p.x] == 'J'));
-            case LEFT -> ((p.x>0) && (input.get(p.y)[p.x] == 'L' || input.get(p.y)[p.x] == '-' || input.get(p.y)[p.x] == 'F'));
-        };
+    private static char getChar(Position p) {
+        return input.get(p.y)[p.x];
     }
 
     private static Position calcNew(Direction d, Position curr) {
-        //TODO: Check if this does what it is expected to
         return switch (d) {
-            case UP -> new Position(curr.x, curr.y-1);
-            case RIGHT -> new Position(curr.x+1, curr.y);
-            case DOWN -> new Position(curr.x, curr.y+1);
-            case LEFT -> new Position(curr.x-1, curr.y);
+            case UP -> ((curr.y > 0) ? new Position(curr.x, curr.y - 1) : null);
+            case RIGHT -> ((curr.x < input.get(curr.y).length - 1) ? new Position(curr.x + 1, curr.y) : null);
+            case DOWN -> ((curr.y < input.size() - 1) ? new Position(curr.x, curr.y + 1) : null);
+            case LEFT -> ((curr.x > 0) ? new Position(curr.x - 1, curr.y) : null);
+        };
+    }
+
+    private static char getReplacement(HashSet<Direction> connections) {
+        if (connections.contains(Direction.UP) && connections.contains(Direction.RIGHT))
+            return 'L';
+        else if (connections.contains(Direction.UP) && connections.contains(Direction.LEFT))
+            return 'J';
+        else if (connections.contains(Direction.UP) && connections.contains(Direction.DOWN))
+            return '|';
+        else if (connections.contains(Direction.RIGHT) && connections.contains(Direction.DOWN))
+            return 'F';
+        else if (connections.contains(Direction.RIGHT) && connections.contains(Direction.LEFT))
+            return '-';
+        else if (connections.contains(Direction.DOWN) && connections.contains(Direction.LEFT))
+            return '7';
+        else
+            return '.';
+    }
+
+    private static boolean points(Direction d, Position p) {
+        char c = getChar(p);
+        return switch (d) {
+            case UP -> (c == 'J' || c == '|' || c == 'L');
+            case RIGHT -> (c == 'F' || c == '-' || c == 'L');
+            case DOWN -> (c == '7' || c == '|' || c == 'F');
+            case LEFT -> (c == '7' || c == '-' || c == 'J');
         };
     }
 
