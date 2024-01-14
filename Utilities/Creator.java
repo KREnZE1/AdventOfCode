@@ -6,8 +6,9 @@ import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 
-public class CreateStructure {
+public class Creator {
 
     public static void main(String[] args) {
         if (args.length == 0)
@@ -37,18 +38,22 @@ public class CreateStructure {
 
     public static void createYearStructure(String yearNum) {
         final String basePath = "Years" + File.separator + "Y" + yearNum;
-        new File(basePath).mkdir();
+        File baseDir = new File(basePath);
+        createDir(baseDir);
         for (int i = 1; i < 26; i++) {
             String childName = convertToDayName(i);
             File newDir = new File(basePath, childName);
-            if (newDir.exists()) {
-                System.err.println("Error with path " + basePath + " and dir name " + childName);
-                return;
-            }
-            newDir.mkdir();
-            createInput(newDir.getPath());
-            createTestInput(newDir.getPath());
-            createJavaClass(newDir.getPath());
+            createDir(newDir);
+            HashSet<String> alreadyExists = new HashSet<>();
+            for (String s : newDir.list())
+                alreadyExists.add(s);
+
+            if (!alreadyExists.contains("input.txt"))
+                createInput(newDir.getPath());
+            if (!alreadyExists.contains("testInput.txt"))
+                createTestInput(newDir.getPath());
+            if (!alreadyExists.contains("Main.java"))
+                createJavaClass(newDir.getPath());
         }
     }
 
@@ -64,12 +69,24 @@ public class CreateStructure {
     private static File createFile(String parentPath, String childName) {
         File file = new File(parentPath, childName);
         try {
-            file.createNewFile();
+            if (!file.exists()) {
+                System.out.println("File with name " + file.getPath() + " doesn't yet exist");
+                System.out.println("Creating new file with that name\n");
+                file.createNewFile();
+            }
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
         }
         return file;
+    }
+
+    private static void createDir(File f) {
+        if (!f.exists()) {
+            System.out.println("Directory with name " + f.getPath() + " doesn't yet exist");
+            System.out.println("Continuing with file creation inside newly created directory\n");
+            f.mkdir();
+        }
     }
 
     private static void createInput(String parentPath) {
@@ -87,7 +104,8 @@ public class CreateStructure {
     private static void createJavaClass(String parentPath) {
         File curr = createFile(parentPath, "Main.java");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(curr));
-                BufferedReader br = new BufferedReader(new FileReader("Utilities" + File.separator + "Baseclass.txt"))) {
+                BufferedReader br = new BufferedReader(
+                        new FileReader("Utilities" + File.separator + "Baseclass.txt"))) {
 
             String temp;
             for (int i = 0; i < 41; i++) {
