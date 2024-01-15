@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class Creator {
+public class Creater {
 
     public static void main(String[] args) {
         if (args.length == 0)

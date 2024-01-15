@@ -40,7 +40,7 @@ public class GUI {
         gbc.fill = GridBagConstraints.BOTH;
         frame.add(action, gbc);
 
-        param1 = new JComboBox<>();
+        param1 = new JComboBox<>(new String[]{"Param", "Year", "Years", "All", "Empty"});
         param1.addActionListener((ActionEvent e) -> tryToggleUtilty());
         gbc.gridx = 1;
         frame.add(param1, gbc);
@@ -132,7 +132,7 @@ public class GUI {
             if (getSelectedItem(action).equals("Create")) {
                 methodName = getSelectedItem(param1).equals("Year") ? "createYearStructure" : "loopThroughYears";
             } else if (getSelectedItem(action).equals("Remove")) {
-                methodName = getSelectedItem(param1).equals("All") ? "delAll" : "delEmpty";
+                methodName = getSelectedItem(param1).equals("All") ? "delAll" : "delAllEmpty";
             } else {
                 System.err.println("No class found for action " + getSelectedItem(action));
                 return;
@@ -154,6 +154,7 @@ public class GUI {
     }
 
     private static void tryYear() {
+        //TODO: Enforce a run of the readInput class beforehand
         try {
             String className = "Years.Y" + getSelectedItem(year) + "." + getSelectedItem(day).replace(' ', '_') + ".Main";
             Class<?> c = Class.forName(className);

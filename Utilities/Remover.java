@@ -1,6 +1,7 @@
 package Utilities;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.function.Function;
 
 public class Remover {
@@ -12,71 +13,53 @@ public class Remover {
         if (args.length == 0)
             printHelpAndExit();
         switch (args[0]) {
-            case "All" -> delAll();
-            case "Empty" -> delAllEmpty();
+            case "All" -> remAll(null);
+            case "Empty" -> remAllEmpty(null);
             default -> printHelpAndExit();
         }
     }
 
     public static void printHelpAndExit() {
-        //TODO: Add new methods
         System.out.println("How to use this file:");
-        System.out.println(" - Use param 'All' to delete every file");
-        System.out.println(" - Use param 'Empty' to delete all files without any content");
+        System.out.println(" - Use param 'All' to remove every file");
+        System.out.println(" - Use param 'Empty' to remove all files without any content");
         System.out.println("CAUTION: THESE ACTIONS ARE IRREVERSABLE!!!");
         System.exit(1);
     }
 
-    public static void delAll() {
-        delFiles((f) -> true);
+    public static void remAll(String[] regexs) {
+        ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
+        if (regexs != null) for (String s : regexs) conditions.add((f) -> f.getName().matches(s));
+        remFiles(conditions);
     }
 
-    public static void delAllEmpty() {
-        delFiles((f) -> f.length() == 0);
+    public static void remAllEmpty(String[] regexs) {
+        ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
+        conditions.add((f) -> f.getName().contains(".java") ? isUnedited(f.length()) : f.length() == 0);
+        if (regexs!= null) for (String s : regexs) conditions.add((f) -> f.getName().matches(s));
+        remFiles(conditions);
     }
 
-    public static void delInput() {
-        delFiles((f) -> f.getName() == "input.txt");
-    }
 
-    public static void delInputEmpty() {
-        delFiles((f) -> f.getName() == "input.txt" && f.length() == 0);
-    }
-
-    public static void delTestIn() {
-        delFiles((f) -> f.getName() == "testInput.txt");
-    }
-
-    public static void delTestInEmpty() {
-        delFiles((f) -> f.getName() == "testInput.txt" && f.length() == 0);
-    }
-
-    public static void delMain() {
-        delFiles((f) -> f.getName() == "Main.java");
-    }
-
-    public static void delMainEmpty() {
-        delFiles((f) -> f.getName() == "Main.java" && isUnedited(f.length()));
-    }
-
-    private static void delFiles(Function<File, Boolean> condition) {
+    private static void remFiles(ArrayList<Function<File, Boolean>> conditions) {
         File baseDir = new File("Years");
         do {
             delHappened = false;
             for (File f : baseDir.listFiles())
-                recDel(f, condition);
+                recRem(f, conditions);
         } while (delHappened);
     }
 
-    private static void recDel(File f, Function<File, Boolean> condition) {
+    private static void recRem(File f, ArrayList<Function<File, Boolean>> conditions) {
         if (f.isFile() || (f.isDirectory() && f.list().length == 0)) {
-            if (condition.apply(f)) {
-                f.delete();
-                delHappened = true;
+            for (Function<File, Boolean> condition : conditions) {
+                if (!condition.apply(f)) return;
             }
+            f.delete();
+            delHappened = true;
         } else {
             for (File _f : f.listFiles())
-                recDel(_f, condition);
+                recRem(_f, conditions);
         }
     }
 
