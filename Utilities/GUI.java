@@ -15,7 +15,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class GUI {
 
@@ -112,7 +111,9 @@ public class GUI {
         frame.setVisible(true);
     }
 
-    private static void tryToggleUtilty() { //TODO: if the action and param don't fit the button should be off
+    private static void tryToggleUtilty() {
+        //TODO: if the action and param don't fit the button should be off
+        //TODO: Allow deletion of year folders
         if ("Action".equals((String) (action.getSelectedItem())) || "Param".equals((String) (param1.getSelectedItem())))
             execUtility.setEnabled(false);
         else execUtility.setEnabled(true);
@@ -125,7 +126,7 @@ public class GUI {
     }
 
     private static void tryUtility() {
-        try { //TODO: Rework deletion methods
+        try {
             String className = "Utilities." + getSelectedItem(action) + "r";
             Class<?> c = Class.forName(className);
 
