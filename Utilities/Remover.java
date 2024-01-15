@@ -27,16 +27,16 @@ public class Remover {
         System.exit(1);
     }
 
-    public static void remAll(String[] regexs) {
+    public static void remAll(String regex) {
         ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
-        if (regexs != null) for (String s : regexs) conditions.add((f) -> f.getName().matches(s));
+        if (regex != null) conditions.add((f) -> f.getName().contains(regex));
         remFiles(conditions);
     }
 
-    public static void remAllEmpty(String[] regexs) {
+    public static void remAllEmpty(String regex) {
         ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
-        conditions.add((f) -> f.getName().contains(".java") ? isUnedited(f.length()) : f.length() == 0);
-        if (regexs!= null) for (String s : regexs) conditions.add((f) -> f.getName().matches(s));
+        conditions.add((f) -> f.getName().endsWith("java") ? isUnedited(f.length()) : f.length() == 0);
+        if (regex!= null) conditions.add((f) -> f.getName().contains(regex));
         remFiles(conditions);
     }
 
@@ -51,20 +51,25 @@ public class Remover {
     }
 
     private static void recRem(File f, ArrayList<Function<File, Boolean>> conditions) {
-        if (f.isFile() || (f.isDirectory() && f.list().length == 0)) {
+        if (f.isFile()) {
             for (Function<File, Boolean> condition : conditions) {
-                if (!condition.apply(f)) return;
+                if (!condition.apply(f))
+                    return;
             }
             f.delete();
             delHappened = true;
-        } else {
+        } else if (f.isDirectory() && f.list().length == 0) {
+            f.delete();
+            delHappened = true;
+        }
+         else {
             for (File _f : f.listFiles())
                 recRem(_f, conditions);
         }
     }
 
     private static boolean isUnedited(long a) {
-        long b = new File("Utilities"+File.separatorChar+"Basetext.txt").length();
+        long b = new File("Utilities"+File.separatorChar+"Baseclass.txt").length();
         int allowedDiff = 2;
         return (a-b)<allowedDiff && (a-b)>-allowedDiff;
     }

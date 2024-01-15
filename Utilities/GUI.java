@@ -15,6 +15,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class GUI {
 
@@ -111,7 +112,7 @@ public class GUI {
         frame.setVisible(true);
     }
 
-    private static void tryToggleUtilty() {
+    private static void tryToggleUtilty() { //TODO: if the action and param don't fit the button should be off
         if ("Action".equals((String) (action.getSelectedItem())) || "Param".equals((String) (param1.getSelectedItem())))
             execUtility.setEnabled(false);
         else execUtility.setEnabled(true);
@@ -132,7 +133,7 @@ public class GUI {
             if (getSelectedItem(action).equals("Create")) {
                 methodName = getSelectedItem(param1).equals("Year") ? "createYearStructure" : "loopThroughYears";
             } else if (getSelectedItem(action).equals("Remove")) {
-                methodName = getSelectedItem(param1).equals("All") ? "delAll" : "delAllEmpty";
+                methodName = getSelectedItem(param1).equals("All") ? "remAll" : "remAllEmpty";
             } else {
                 System.err.println("No class found for action " + getSelectedItem(action));
                 return;
@@ -140,7 +141,7 @@ public class GUI {
 
             for (Method m : c.getDeclaredMethods()) {
                 if (methodName.equals(m.getName())) {
-                    m.invoke(null, param2.getText().split(", ")); //TODO: Add better/more robust parsing
+                    m.invoke(null, param2.getText().split(", ")); //TODO: Add more robust parsing
                     break;
                 }
             }
@@ -180,9 +181,10 @@ public class GUI {
         }
     }
 
-    private static <T> T getSelectedItem(JComboBox<T> comb) {
-        return (T) comb.getSelectedItem();
+    private static String getSelectedItem(JComboBox<String> comb) {
+        return (String) comb.getSelectedItem();
     }
+
 }
 //TODO: Print error output to own console instead of std:err
 //TODO: Print part solutions to own console instead of std:out
