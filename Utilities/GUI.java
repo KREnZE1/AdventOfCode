@@ -126,7 +126,7 @@ public class GUI {
     private static void tryUtility() {
         try { //TODO: Rework deletion methods
             String className = "Utilities." + getSelectedItem(action) + "r";
-            Class c = Class.forName(className);
+            Class<?> c = Class.forName(className);
 
             String methodName = null;
             if (getSelectedItem(action).equals("Create")) {

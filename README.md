@@ -8,7 +8,7 @@ A puzzle consists of an input unique to each participant. The rules on what to d
 
 ## Years
 
-The calender started in 2015 and jhas continued every year since then. This repository contains solutions for the tasks I have already completed and usually I even adhere to the same format!
+The calender started in 2015 and has continued every year since then. This repository contains solutions for the tasks I have already completed and usually I even adhere to the same format!
 
 ### What is already implemented
 
