@@ -15,7 +15,6 @@ public class Main {
     static char[] compArray;
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -77,6 +76,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         for (Play p : input) p.evaluateHand();
         compArray = labels;
         bubblesort();
@@ -85,6 +86,8 @@ public class Main {
 
 
     public static void solvePartTwo() {
+        readInput();
+        
         for (Play p : input) p.evaluateWithJoker();
         compArray = jokerLabels;
         bubblesort();

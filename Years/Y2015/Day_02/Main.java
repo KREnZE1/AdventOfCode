@@ -12,7 +12,6 @@ public class Main {
     static ArrayList<Gift> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -34,6 +33,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
          int sum = 0;
         for (Gift g : input) {
             sum += g.sizeSmallestSide + g.surfaceArea;
@@ -42,6 +43,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         for (Gift g : input) {
             sum += g.bowLen + g.ribbonLen;

@@ -13,7 +13,6 @@ public class Main {
     static ArrayList<String> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -71,6 +70,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         BigInteger product = BigInteger.ONE;
         Race[] races = parseRaces(true);
         for (int i = 0; i < races.length; i++) product = product.multiply(races[i].value);
@@ -78,6 +79,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         Race[] races = parseRaces(false); // races should only contain one element here
         if (races.length > 1) throw new IllegalArgumentException("More than one element in an array which only considers the first Element");
         System.out.println(races[0].value);

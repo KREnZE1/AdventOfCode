@@ -11,7 +11,6 @@ public class Main {
     static ArrayList<String> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -32,10 +31,12 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
         //TODO: Implement
     }
 
     public static void solvePartTwo() {
+        readInput();
         //TODO: Implement
     }
 }

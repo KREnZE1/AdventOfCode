@@ -15,8 +15,6 @@ public class Main {
     static ArrayList<Node> beginnings = new ArrayList<>(), endings = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
-        cleanInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -25,14 +23,15 @@ public class Main {
         try (BufferedReader br = new BufferedReader(new FileReader(INPUTLOC))) {
             String temp;
             while ((temp = br.readLine()) != null)
-                input.add(temp);
+            input.add(temp);
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
         }
+        cleanInput();
     }
 
-    public static void cleanInput() {
+    private static void cleanInput() {
         instruction = input.get(0);
 
         ArrayList<Node> nodes = new ArrayList<>();
@@ -60,6 +59,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         Node curr = begin;
         int index = 0;
         int repetitions = 0;
@@ -74,6 +75,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         //TODO: Optimize
         ArrayList<Node> currentPositions = beginnings;
         int index = 0;

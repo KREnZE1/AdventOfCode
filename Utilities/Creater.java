@@ -85,7 +85,7 @@ public class Creater {
         if (!f.exists()) {
             System.out.println("Directory with name " + f.getPath() + " doesn't yet exist");
             System.out.println("Continuing with file creation inside newly created directory\n");
-            f.mkdir();
+            f.mkdirs();
         }
     }
 
@@ -108,7 +108,7 @@ public class Creater {
                         new FileReader("Utilities" + File.separator + "Baseclass.txt"))) {
 
             String temp;
-            for (int i = 0; i < 41; i++) {
+            for (int i = 0; i < 42; i++) {
                 temp = br.readLine();
                 if (i == 0) {
                     String begin = temp.substring(0, 15); //Should contain everything up to the Y in the year num

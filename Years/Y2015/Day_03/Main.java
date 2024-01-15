@@ -15,7 +15,6 @@ public class Main {
     static int subX = 0, subY = 0;
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -36,6 +35,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         visitedHouses.add(new Coordinate(x, y));
         for (char c : input.toCharArray()) {
             if (c == '<')
@@ -54,6 +55,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         visitedHouses = new ArrayList<>();
         x = 0;
         y = 0;

@@ -10,7 +10,6 @@ public class Main {
     static String input = "";
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -30,6 +29,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         int sum = 0;
         for (char c : input.toCharArray()) {
             if (c == '(') sum++;
@@ -40,6 +41,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         for (int i=0; i<input.length(); i++) {
             if (input.charAt(i) == '(') sum++;

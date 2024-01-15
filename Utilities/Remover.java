@@ -30,24 +30,38 @@ public class Remover {
     public static void remAll(String regex) {
         ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
         if (regex != null) conditions.add((f) -> f.getName().contains(regex));
-        remFiles(conditions);
+        remFiles(new File("Years"), conditions);
     }
 
     public static void remAllEmpty(String regex) {
         ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
         conditions.add((f) -> f.getName().endsWith("java") ? isUnedited(f.length()) : f.length() == 0);
         if (regex!= null) conditions.add((f) -> f.getName().contains(regex));
-        remFiles(conditions);
+        remFiles(new File("Years"), conditions);
     }
 
+    public static void remYear(String year) {
+        ArrayList<Function<File, Boolean>> conditions = new ArrayList<>();
+        conditions.add((f) -> true);
+        File delDir = new File("Years"+File.separatorChar+"Y"+year);
+        if (delDir.exists()) remFiles(delDir, conditions);
+    }
 
-    private static void remFiles(ArrayList<Function<File, Boolean>> conditions) {
-        File baseDir = new File("Years");
+    public static void remYears(String beginYear, String endYear) {
+        int begin = Integer.parseInt(beginYear);
+        int end = Integer.parseInt(endYear);
+        for (int i = begin; i <= end; i++) {
+            remYear(Integer.toString(i));
+        }
+    }
+
+    private static void remFiles(File baseDir, ArrayList<Function<File, Boolean>> conditions) {
         do {
             delHappened = false;
             for (File f : baseDir.listFiles())
                 recRem(f, conditions);
         } while (delHappened);
+        if (baseDir.isFile() || (baseDir.isDirectory() && baseDir.list().length == 0)) baseDir.delete();
     }
 
     private static void recRem(File f, ArrayList<Function<File, Boolean>> conditions) {

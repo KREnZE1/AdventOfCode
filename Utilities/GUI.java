@@ -30,7 +30,7 @@ public class GUI {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        action = new JComboBox<>(new String[]{"Action", "Create", "Remove"});
+        action = new JComboBox<>(new String[] { "Action", "Create", "Remove" });
         action.addActionListener((ActionEvent e) -> tryToggleUtilty());
         gbc.insets = new Insets(20, 5, 5, 5);
         gbc.weighty = 0.5;
@@ -40,7 +40,7 @@ public class GUI {
         gbc.fill = GridBagConstraints.BOTH;
         frame.add(action, gbc);
 
-        param1 = new JComboBox<>(new String[]{"Param", "Year", "Years", "All", "Empty"});
+        param1 = new JComboBox<>(new String[] { "Param", "Year", "Years", "All", "Empty" });
         param1.addActionListener((ActionEvent e) -> tryToggleUtilty());
         gbc.gridx = 1;
         frame.add(param1, gbc);
@@ -71,12 +71,14 @@ public class GUI {
         gbc.fill = GridBagConstraints.BOTH;
         frame.add(year, gbc);
 
-        day = new JComboBox<>(new String[]{"Day", "Day 01", "Day 02", "Day 03", "Day 04", "Day 05", "Day 06", "Day 07", "Day 08", "Day 09", "Day 10", "Day 11", "Day 12", "Day 13", "Day 14", "Day 15", "Day 16", "Day 17", "Day 18", "Day 19", "Day 20", "Day 21", "Day 22", "Day 23", "Day 24", "Day 25"});
+        day = new JComboBox<>(new String[] { "Day", "Day 01", "Day 02", "Day 03", "Day 04", "Day 05", "Day 06",
+                "Day 07", "Day 08", "Day 09", "Day 10", "Day 11", "Day 12", "Day 13", "Day 14", "Day 15", "Day 16",
+                "Day 17", "Day 18", "Day 19", "Day 20", "Day 21", "Day 22", "Day 23", "Day 24", "Day 25" });
         day.addActionListener((ActionEvent e) -> tryToggleYear());
         gbc.gridx = 1;
         frame.add(day, gbc);
 
-        part = new JComboBox<>(new String[]{"Part", "Part 1", "Part 2"});
+        part = new JComboBox<>(new String[] { "Part", "Part 1", "Part 2" });
         part.addActionListener((ActionEvent e) -> tryToggleYear());
         gbc.gridx = 2;
         frame.add(part, gbc);
@@ -97,7 +99,8 @@ public class GUI {
 
         console = new JTextArea();
         console.setEditable(false);
-        JScrollPane scroll = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scroll = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setPreferredSize(new Dimension(800, 300));
         scroll.setMinimumSize(scroll.getPreferredSize());
         gbc.insets = new Insets(5, 5, 20, 5);
@@ -112,17 +115,21 @@ public class GUI {
     }
 
     private static void tryToggleUtilty() {
-        //TODO: if the action and param don't fit the button should be off
-        //TODO: Allow deletion of year folders
-        if ("Action".equals((String) (action.getSelectedItem())) || "Param".equals((String) (param1.getSelectedItem())))
+        if ("Action".equals(getSelectedItem(action)) || "Param".equals(getSelectedItem(param1)))
             execUtility.setEnabled(false);
-        else execUtility.setEnabled(true);
+        else if ("Create".equals(getSelectedItem(action))
+                && ("All".equals(getSelectedItem(param1)) || "Empty".equals(getSelectedItem(param1))))
+            execUtility.setEnabled(false);
+        else
+            execUtility.setEnabled(true);
     }
 
     private static void tryToggleYear() {
-        if ("Year".equals((String) (year.getSelectedItem())) || "Day".equals((String) (day.getSelectedItem())) || "Part".equals((String) (part.getSelectedItem())))
+        if ("Year".equals((String) (year.getSelectedItem())) || "Day".equals((String) (day.getSelectedItem()))
+                || "Part".equals((String) (part.getSelectedItem())))
             execYear.setEnabled(false);
-        else execYear.setEnabled(true);
+        else
+            execYear.setEnabled(true);
     }
 
     private static void tryUtility() {
@@ -130,16 +137,7 @@ public class GUI {
             String className = "Utilities." + getSelectedItem(action) + "r";
             Class<?> c = Class.forName(className);
 
-            String methodName = null;
-            if (getSelectedItem(action).equals("Create")) {
-                methodName = getSelectedItem(param1).equals("Year") ? "createYearStructure" : "loopThroughYears";
-            } else if (getSelectedItem(action).equals("Remove")) {
-                methodName = getSelectedItem(param1).equals("All") ? "remAll" : "remAllEmpty";
-            } else {
-                System.err.println("No class found for action " + getSelectedItem(action));
-                return;
-            }
-
+            String methodName = getMethodName(getSelectedItem(action), getSelectedItem(param1));
             for (Method m : c.getDeclaredMethods()) {
                 if (methodName.equals(m.getName())) {
                     m.invoke(null, param2.getText().split(", ")); //TODO: Add more robust parsing
@@ -147,7 +145,7 @@ public class GUI {
                 }
             }
         } catch (ClassNotFoundException cnf) {
-
+            //TODO: Do something
         } catch (IllegalAccessException iae) {
 
         } catch (InvocationTargetException ite) {
@@ -156,9 +154,9 @@ public class GUI {
     }
 
     private static void tryYear() {
-        //TODO: Enforce a run of the readInput class beforehand
         try {
-            String className = "Years.Y" + getSelectedItem(year) + "." + getSelectedItem(day).replace(' ', '_') + ".Main";
+            String className = "Years.Y" + getSelectedItem(year) + "." + getSelectedItem(day).replace(' ', '_')
+                    + ".Main";
             Class<?> c = Class.forName(className);
 
             String methodName = "solve" + getSelectedItem(part).replace(" ", "");
@@ -170,7 +168,10 @@ public class GUI {
             }
         } catch (ClassNotFoundException cnf) {
             //Should not happen, because all three comboboxes have predefined contents, all of which should link to a runnable method
-            System.err.println("An error occurred during finding a solution method.\nThe following parameters lead to a faulty call:\n" + ((String) year.getSelectedItem()) + "\n" + ((String) day.getSelectedItem() + "\n" + ((String) part.getSelectedItem())));
+            System.err.println(
+                    "An error occurred during finding a solution method.\nThe following parameters lead to a faulty call:\n"
+                            + ((String) year.getSelectedItem()) + "\n"
+                            + ((String) day.getSelectedItem() + "\n" + ((String) part.getSelectedItem())));
             System.err.println(cnf.getLocalizedMessage());
             System.err.println(cnf.getStackTrace());
         } catch (IllegalAccessException | InvocationTargetException exc) {
@@ -186,6 +187,23 @@ public class GUI {
         return (String) comb.getSelectedItem();
     }
 
+    private static String getMethodName(String action, String param1) {
+        if ("Create".equals(action)) {
+            return "Year".equals(param1) ? "createYearStructure" : "loopThroughYears";
+        } else if ("Remove".equals(action)) {
+            if ("Year".equals(param1))
+                return "remYear";
+            else if ("Years".equals(param1))
+                return "remYears";
+            else if ("All".equals(param1))
+                return "remAll";
+            else if ("Empty".equals(param1))
+                return "remAllEmpty";
+        }
+        System.err.println("No class found for action " + action + " and parameter " + param1);
+        return "";
+
+    }
 }
 //TODO: Print error output to own console instead of std:err
 //TODO: Print part solutions to own console instead of std:out

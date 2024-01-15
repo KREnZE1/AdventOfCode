@@ -15,8 +15,6 @@ public class Main {
     static ArrayList<Converter> conversions = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
-        prepareInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -25,11 +23,12 @@ public class Main {
         try (BufferedReader br = new BufferedReader(new FileReader(INPUTLOC))) {
             String temp;
             while ((temp = br.readLine()) != null)
-                input.add(parse(temp));
+            input.add(parse(temp));
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
             System.err.println(ioe.getStackTrace());
         }
+        prepareInput();
     }
 
     private static String parse(String in) {
@@ -54,6 +53,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         BigInteger min = null;
         BigInteger currVal = null;
 
@@ -69,6 +70,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         //TODO Optimize (or use Linux instead of Windows because there it works :shrug:)
         BigInteger min = null;
         BigInteger currVal = null;

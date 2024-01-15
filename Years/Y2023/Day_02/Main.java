@@ -11,7 +11,6 @@ public class Main {
     static ArrayList<Game> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -52,6 +51,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         final int RED = 12;
         final int GREEN = 13;
         final int BLUE = 14;
@@ -73,6 +74,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         for (int i = 0; i < input.size(); i++) {
             int minRed = Integer.MIN_VALUE;

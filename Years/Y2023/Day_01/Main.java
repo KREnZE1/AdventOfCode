@@ -13,7 +13,6 @@ public class Main {
     static char writtenNum = ' ';
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -33,6 +32,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         int sum = 0;
         char firstNum = ' ';
         char lastNum = ' ';
@@ -57,6 +58,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         boolean firstFound = false;
         char firstNum = ' ';

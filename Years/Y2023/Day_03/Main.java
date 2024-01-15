@@ -11,7 +11,6 @@ public class Main {
     static char[][] input = new char[140][];
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -34,6 +33,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         //Warning: A number can be next to two different symbols and will be counted twice in this case, which it shouldn't
         int sum = 0;
         String num = "";
@@ -122,6 +123,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         int currJ = 0;
         String num = "";

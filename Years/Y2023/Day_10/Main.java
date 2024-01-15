@@ -42,7 +42,6 @@ public class Main {
     static ArrayList<char[]> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -63,6 +62,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         //Step 1: Find start location
         Position start = new Position(0, 0);
         boolean done = false;
@@ -150,6 +151,7 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
         //TODO: Implement
     }
 }

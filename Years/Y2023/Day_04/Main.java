@@ -12,7 +12,6 @@ public class Main {
     static ArrayList<Game> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -49,6 +48,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         int sum = 0;
         for (Game g : input)
             sum += g.calcPoints();
@@ -56,6 +57,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         for (int i = 0; i < input.size(); i++) {
             int matches = input.get(i).countMatches();
             for (int j = 1; j <= matches; j++) {

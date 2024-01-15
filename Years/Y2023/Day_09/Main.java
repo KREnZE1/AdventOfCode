@@ -12,7 +12,6 @@ public class Main {
     static ArrayList<Dataset> input = new ArrayList<>();
 
     public static void main(String[] args) {
-        readInput();
         solvePartOne();
         solvePartTwo();
     }
@@ -37,6 +36,8 @@ public class Main {
     }
 
     public static void solvePartOne() {
+        readInput();
+
         int sum = 0;
         for (Dataset d : input)
             sum += d.lastNum;
@@ -44,6 +45,8 @@ public class Main {
     }
 
     public static void solvePartTwo() {
+        readInput();
+        
         int sum = 0;
         for (Dataset d : input)
             sum += d.firstNum;
